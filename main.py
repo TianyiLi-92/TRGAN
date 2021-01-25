@@ -39,7 +39,7 @@ elif FLAGS.task == 'TRGAN':
 else:
     raise ValueError('Need to specify FLAGS.task to be TRCENet or TRGAN')
 
-context_train, gap_train, context_dev, gap_dev, context_test, gap_test = generateDataset(FLAGS.dataset_path, FLAGS.mask_context, FLAGS.mask_gap)
+context_train, gap_train, context_dev, gap_dev, context_test, gap_test = generateDataset(FLAGS.dataset_path, FLAGS.mask_context, FLAGS.mask_gap, FLAGS.mask_GenOut)
 
 print("--------------- {} mode -----------------".format(FLAGS.mode))
 tf.random.set_seed(FLAGS.globalSeed)
@@ -50,7 +50,7 @@ if FLAGS.mode == 'train':
     #early_stopping_callback = EarlyStopping(monitor='val_content_loss', patience=50, verbose=2, mode='min')
     model_checkpoint_callback = ModelCheckpoint(filepath=os.path.join(FLAGS.output_dir, 'checkpoint', 'ckpt.{epoch:02d}'))
     tensorboard_callback = TensorBoard(log_dir=FLAGS.summary_dir, write_graph=False, profile_batch=0)
-    sample_callback = SampleCallback(data_dev=(context_dev[0:3], gap_dev[0:3]), mask_gap=FLAGS.mask_gap, logdir=os.path.join(FLAGS.summary_dir, 'image'))
+    sample_callback = SampleCallback(data_dev=(context_dev[0:3], gap_dev[0:3]), mask_gap=FLAGS.mask_gap, mask_GenOut=FLAGS.mask_GenOut, logdir=os.path.join(FLAGS.summary_dir, 'image'))
     epoch_callback = EpochCallback()
 
     #callbacks = [early_stopping_callback, model_checkpoint_callback, tensorboard_callback, sample_callback, epoch_callback]

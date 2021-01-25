@@ -14,8 +14,8 @@ class TRCENet(keras.Model):
 
         #self.netE = model.encoder(FLAGS.nei, FLAGS.nc, FLAGS.kW, FLAGS.sW, FLAGS.nef, FLAGS.nBottleneck)
         #self.netG = model.decoder(FLAGS.nBottleneck, FLAGS.noiseGen, FLAGS.nz, FLAGS.ngf, FLAGS.nc, FLAGS.ngo)
-        self.netE = model.encoder_Michele(FLAGS.nei, FLAGS.nc, FLAGS.kW, FLAGS.sW)
-        self.netG = model.decoder_Michele(FLAGS.nc, FLAGS.ngo)
+        self.netE = model.encoder_Michele(FLAGS.nei, FLAGS.nc, FLAGS.ekW, FLAGS.esW)
+        self.netG = model.decoder_Michele(FLAGS.nc, FLAGS.dkW, FLAGS.dsW, FLAGS.ngo)
 
         self.mse_loss_tracker = keras.metrics.Mean(name="mse_loss")
         self.vel_grad_loss_tracker = keras.metrics.Mean(name="vel_grad_loss")

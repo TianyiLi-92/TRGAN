@@ -34,7 +34,7 @@ class EdgeCutting2D(keras.layers.Layer):
     def __init__(self, edge, **kwargs):
         super(EdgeCutting2D, self).__init__(**kwargs)
         self.edge = edge
-    
+
     def call(self, inputs):
         return edge_cutting(inputs, self.edge)
 

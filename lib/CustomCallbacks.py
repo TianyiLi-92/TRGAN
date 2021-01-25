@@ -6,9 +6,15 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 import numpy as np
 
-def inpainting(context, gap, mask_gap):
+def inpainting(context, gap, mask_gap, mask_GenOut):
     img = context.copy()
-    img[:,mask_gap[0][0]:mask_gap[0][1],mask_gap[1][0]:mask_gap[1][1],:] = gap
+    img[
+        :,mask_gap[0][0]:mask_gap[0][1],
+        mask_gap[1][0]:mask_gap[1][1],:
+    ] = gap[
+        :,mask_gap[0][0]-mask_GenOut[0][0]:mask_gap[0][1]-mask_GenOut[0][0],
+        mask_gap[1][0]-mask_GenOut[1][0]:mask_gap[1][1]-mask_GenOut[1][0],:
+    ]
 
     return img
 
@@ -52,10 +58,11 @@ def plot_to_image(figure):
 
 
 class SampleCallback(keras.callbacks.Callback):
-    def __init__(self, data_dev, mask_gap, logdir):
+    def __init__(self, data_dev, mask_gap, mask_GenOut, logdir):
         super(SampleCallback, self).__init__()
         self.context_dev, self.gap_dev = data_dev
         self.mask_gap = mask_gap
+        self.mask_GenOut = mask_GenOut
         shape = self.context_dev.shape
         self.imgs = np.empty((3,)+shape[0:3])
         # Sets up the log directory.
@@ -69,8 +76,8 @@ class SampleCallback(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         self.imgs[0] = self.context_dev[:,:,:,0]
         gap_pred = self.model.predict(self.context_dev)
-        self.imgs[1] = inpainting(self.context_dev, gap_pred, self.mask_gap)[:,:,:,0]
-        self.imgs[2] = inpainting(self.context_dev, self.gap_dev, self.mask_gap)[:,:,:,0]
+        self.imgs[1] = inpainting(self.context_dev, gap_pred, self.mask_gap, self.mask_GenOut)[:,:,:,0]
+        self.imgs[2] = inpainting(self.context_dev, self.gap_dev, self.mask_gap, self.mask_GenOut)[:,:,:,0]
         # Prepare the plot
         figure = image_grid(self.imgs)
         # Using the file writer, convert the plot to image and log
