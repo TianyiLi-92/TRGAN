@@ -1,8 +1,6 @@
 from tensorflow.keras.layers import Input, Conv2D, LeakyReLU, Flatten, Dropout, Reshape, Conv2DTranspose, Dense
 from tensorflow.keras.models import Model
 
-from lib.ops import EdgeCutting2D
-
 # Definition of the encoder (from Michele)
 # Encode Input Context to noise (architecture similar to Discriminator)
 def encoder_Michele(nei, nc, ekW, esW):
@@ -55,13 +53,10 @@ def decoder_Michele(nc, dkW, dsW, ngo):
     return Model(latent_vector, outputs)
 
 # Adversarial discriminator net (from Michele)
-def discriminator_Michele(ngo, ndi, nc):
+def discriminator_Michele(ngo, dkW, dsW, nc):
     inputs = Input( (ngo, ngo, nc) )
-    # input pred: (ngo) x (ngo) x (nc)
-    ne = (ngo-ndi)//2
-    x = EdgeCutting2D( edge=((ne,ne),(ne,ne)) )(inputs)
-    # state size: (ndi) x (ndi) x (nc), going into a convolution
-    x = Conv2DTranspose(nc, 64//ndi, 64//ndi)(x)
+    # input pred: (ngo) x (ngo) x (nc), going into a convolution
+    x = Conv2DTranspose(nc, dkW, dsW)(inputs)
     # state size: 64 x 64 x (nc)
     x = Conv2D(3, (4, 4), (2, 2), 'same')(x)
     x = LeakyReLU(0.2)(x)
@@ -93,7 +88,7 @@ if __name__=="__main__":
 
     netE = encoder_Michele(FLAGS.nei, FLAGS.nc, FLAGS.ekW, FLAGS.esW)
     netG = decoder_Michele(FLAGS.nc, FLAGS.dkW, FLAGS.dsW, FLAGS.ngo)
-    netD = discriminator_Michele(FLAGS.ngo, FLAGS.ndi, FLAGS.nc)
+    netD = discriminator_Michele(FLAGS.ngo, FLAGS.dkW, FLAGS.dsW, FLAGS.nc)
 
     tf.keras.utils.plot_model(netE, to_file='netE_Michele.png', show_shapes=True)
     tf.keras.utils.plot_model(netG, to_file='netG_Michele.png', show_shapes=True)

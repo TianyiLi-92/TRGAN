@@ -15,7 +15,7 @@ class TRGAN(keras.Model):
         #self.netD = model.discriminator(FLAGS.conditionAdv, FLAGS.nei, FLAGS.nc, FLAGS.kW, FLAGS.sW, FLAGS.ndf, FLAGS.ngo)
         self.netE = model.encoder_Michele(FLAGS.nei, FLAGS.nc, FLAGS.ekW, FLAGS.esW)
         self.netG = model.decoder_Michele(FLAGS.nc, FLAGS.dkW, FLAGS.dsW, FLAGS.ngo)
-        self.netD = model.discriminator_Michele(FLAGS.ngo, FLAGS.ndi, FLAGS.nc)
+        self.netD = model.discriminator_Michele(FLAGS.ngo, FLAGS.dkW, FLAGS.dsW, FLAGS.nc)
 
         self.mse_loss_tracker = keras.metrics.Mean(name="mse_loss")
         self.vel_grad_loss_tracker = keras.metrics.Mean(name="vel_grad_loss")

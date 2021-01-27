@@ -20,7 +20,7 @@ def defaultFlags():
     Flags.DEFINE_integer('batch_size', 64, 'Batch size of the input batch')
     Flags.DEFINE_string('dataset_path', './dataset/uf_y41.h5', 'The path of the dataset')
     Flags.DEFINE_list('mask_context', [[32,96],[32,96]], 'The size and position of the context')
-    Flags.DEFINE_list('mask_gap', [[16,48],[16,48]], 'The size and position (relative to the context) of the gap')
+    Flags.DEFINE_list('mask_gap', [[8,56],[8,56]], 'The size and position (relative to the context) of the gap')
     Flags.DEFINE_list('mask_GenOut', [[16,48],[16,48]], 'The size and position (relative to the context) of Gen output')
 
     # Generator configuration
@@ -34,7 +34,6 @@ def defaultFlags():
     Flags.DEFINE_integer('dkW', 17, 'The kernel width of the last convolution of Decoder')
     Flags.DEFINE_integer('dsW', 1, 'The step of the last convolution of Decoder in the width dimension')
     Flags.DEFINE_integer('ngo', 8, 'The edge length of Gen output')
-    Flags.DEFINE_integer('ndi', 32, 'The edge length of Decoder input')
     Flags.DEFINE_boolean('noiseGen', False, 'Whether add noises Z of nz dimensions to the latent vector. True => Yes')
     Flags.DEFINE_string('noisetype', 'normal', 'Type of the noise: uniform / normal')
     Flags.DEFINE_integer('nz', 100, 'The dim for Z')
