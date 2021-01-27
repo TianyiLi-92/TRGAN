@@ -11,9 +11,10 @@ def read_data(filename):
 
 def make_gappy_data(dataset, mask_context, mask_gap, mask_GenOut):
     context = dataset[:,mask_context[0][0]:mask_context[0][1],mask_context[1][0]:mask_context[1][1],:].copy()
-    context[:,mask_gap[0][0]:mask_gap[0][1],mask_gap[1][0]:mask_gap[1][1],:] = 0
 
     gap = context[:,mask_GenOut[0][0]:mask_GenOut[0][1],mask_GenOut[1][0]:mask_GenOut[1][1],:].copy()
+
+    context[:,mask_gap[0][0]:mask_gap[0][1],mask_gap[1][0]:mask_gap[1][1],:] = 0
 
     return context, gap
 

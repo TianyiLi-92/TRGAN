@@ -2,7 +2,7 @@
 source /home/node2/anaconda3/etc/profile.d/conda.sh
 conda activate tf2.3
 
-TASK="TRGAN"
+TASK="TRCENet"
 MODE="train"
 BATCH_SIZE=128
 NEI=64
@@ -14,10 +14,10 @@ NGO=48
 NDI=32
 LEARNING_RATE=0.0002
 MAX_EPOCH=500
-ADVERSARIAL_RATIO=1.e-1
 LAMBDA_VEL_GRAD=0
 OVERLAPPRED=0
-SUFFIX="_Michele_NEI${NEI}_EKW${EKW}_ESW${ESW}_DKW${DKW}_DSW${DSW}_NGO${NGO}_NDI${NDI}_LR${LEARNING_RATE}_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
+PATIENCE=50
+SUFFIX="_Michele_NEI${NEI}_EKW${EKW}_ESW${ESW}_DKW${DKW}_DSW${DSW}_NGO${NGO}_NDI${NDI}_LR${LEARNING_RATE}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}_PT${PATIENCE}"
 
 CMD="python main.py \
 --task ${TASK} \
@@ -31,7 +31,6 @@ CMD="python main.py \
 --ndi ${NDI} \
 --learning_rate ${LEARNING_RATE} \
 --max_epoch ${MAX_EPOCH} \
---adversarial_ratio ${ADVERSARIAL_RATIO} \
 --lambda_vel_grad ${LAMBDA_VEL_GRAD} \
 --overlapPred ${OVERLAPPRED} \
 --output_dir ./output/${TASK}${SUFFIX} \
