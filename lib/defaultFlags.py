@@ -20,8 +20,8 @@ def defaultFlags():
     Flags.DEFINE_integer('batch_size', 64, 'Batch size of the input batch')
     Flags.DEFINE_string('dataset_path', './dataset/uf_y41.h5', 'The path of the dataset')
     Flags.DEFINE_list('mask_context', [[32,96],[32,96]], 'The size and position of the context')
-    Flags.DEFINE_list('mask_gap', [[8,56],[8,56]], 'The size and position (relative to the context) of the gap')
-    Flags.DEFINE_list('mask_GenOut', [[16,48],[16,48]], 'The size and position (relative to the context) of Gen output')
+    Flags.DEFINE_list('mask_gap', [[16,48],[16,48]], 'The size and position (relative to the context) of the gap')
+    Flags.DEFINE_list('mask_GenOut', [[8,56],[8,56]], 'The size and position (relative to the context) of Gen output')
 
     # Generator configuration
     Flags.DEFINE_integer('nei', 16, 'The edge length of Encoder input')

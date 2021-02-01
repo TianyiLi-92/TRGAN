@@ -11,7 +11,7 @@ ESW=1
 DKW=17
 DSW=1
 NGO=48
-LEARNING_RATE=0.00002
+LEARNING_RATE=0.0002
 MAX_EPOCH=500
 ADVERSARIAL_RATIO=1.e-1
 LAMBDA_VEL_GRAD=0
@@ -35,9 +35,9 @@ CMD="python main.py \
 --output_dir ./output/${TASK}${SUFFIX} \
 --summary_dir ./summary/${TASK}${SUFFIX} \
 --mode ${MODE} \
---checkpoint ./output/${TASK}${SUFFIX}/checkpoint/ckpt.262 "
-
+--checkpoint ./output/${TASK}${SUFFIX}/checkpoint/ckpt.46 "
 
 echo ${CMD} > ./logs/${TASK}_${MODE}${SUFFIX}_log.out
 
 ${CMD} >> ./logs/${TASK}_${MODE}${SUFFIX}_log.out
+

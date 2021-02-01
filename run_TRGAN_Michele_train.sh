@@ -39,4 +39,3 @@ CMD="python main.py \
 echo ${CMD} > ./logs/${TASK}_${MODE}${SUFFIX}_log.out
 
 ${CMD} >> ./logs/${TASK}_${MODE}${SUFFIX}_log.out
-
