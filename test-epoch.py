@@ -1,6 +1,8 @@
 import os
 from tensorflow.keras.optimizers import Adam
+
 import numpy as np
+import time
 
 from lib.defaultFlags import defaultFlags
 from lib.generateDataset import generateDataset
@@ -36,6 +38,9 @@ hist_dev, bin_edges_dev = np.histogram(gap_dev, bins=100, density=True)
 KLD_train, KLD_dev = [], [] # Kullback-Leibler divergence
 
 for epoch in range(FLAGS.max_epoch):
+    print("\nStart of epoch %d" % (epoch,))
+    start_time = time.time()
+
     net.load_weights( os.path.join(FLAGS.output_dir, 'checkpoint', 'ckpt.{:02d}'.format(epoch+1)) )
 
     gap_train_pred = net.predict(context_train, verbose=2)
@@ -49,6 +54,8 @@ for epoch in range(FLAGS.max_epoch):
 
     KLD = np.sum( hist_dev * np.log( hist_dev / (hist_dev_pred + FLAGS.EPS) ) * (bin_edges_dev[1] - bin_edges_dev[0]) )
     KLD_dev.append(KLD)
+
+    print("Epoch %d/%d - %ds" % (epoch + 1, FLAGS.max_epoch, time.time() - start_time))
 
 import pandas as pd
 df_KLD = pd.DataFrame({'KLD_train': KLD_train, 'KLD_dev': KLD_dev})
