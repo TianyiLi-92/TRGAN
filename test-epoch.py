@@ -55,7 +55,11 @@ for epoch in range(FLAGS.max_epoch):
     KLD = np.sum( hist_dev * np.log( hist_dev / (hist_dev_pred + FLAGS.EPS) ) * (bin_edges_dev[1] - bin_edges_dev[0]) )
     KLD_dev.append(KLD)
 
-    print("Epoch %d/%d - %ds" % (epoch + 1, FLAGS.max_epoch, time.time() - start_time))
+    # Display KLD at the end of each epoch.
+    print(
+        "Epoch %d/%d - %ds - KLD_train: %.4e - KLD_dev: %.4e" \
+        % ( epoch + 1, FLAGS.max_epoch, time.time() - start_time, KLD_train[epoch], KLD_dev[epoch] )
+    )
 
 import pandas as pd
 df_KLD = pd.DataFrame({'KLD_train': KLD_train, 'KLD_dev': KLD_dev})
