@@ -38,7 +38,7 @@ hist_dev, bin_edges_dev = np.histogram(gap_dev, bins=100, density=True)
 KLD_train, KLD_dev = [], [] # Kullback-Leibler divergence
 
 for epoch in range(FLAGS.max_epoch):
-    print("\nStart of epoch %d" % (epoch,))
+    print("\nStart of epoch %d" % (epoch+1,))
     start_time = time.time()
 
     net.load_weights( os.path.join(FLAGS.output_dir, 'checkpoint', 'ckpt.{:02d}'.format(epoch+1)) )
