@@ -44,13 +44,13 @@ for epoch in range(FLAGS.max_epoch):
     net.load_weights( os.path.join(FLAGS.output_dir, 'checkpoint', 'ckpt.{:02d}'.format(epoch+1)) )
 
     gap_train_pred = net.predict(context_train, verbose=2)
-    hist_train_pred, _ = np.histogram(gap_train_pred, bins=100, density=True)
+    hist_train_pred, _ = np.histogram(gap_train_pred, bins=bin_edges_train, density=True)
 
     KLD = np.sum( hist_train * np.log( hist_train / (hist_train_pred + FLAGS.EPS) ) * (bin_edges_train[1] - bin_edges_train[0]) )
     KLD_train.append(KLD)
 
     gap_dev_pred = net.predict(context_dev, verbose=2)
-    hist_dev_pred, _ = np.histogram(gap_dev_pred, bins=100, density=True)
+    hist_dev_pred, _ = np.histogram(gap_dev_pred, bins=bin_edges_dev, density=True)
 
     KLD = np.sum( hist_dev * np.log( hist_dev / (hist_dev_pred + FLAGS.EPS) ) * (bin_edges_dev[1] - bin_edges_dev[0]) )
     KLD_dev.append(KLD)
