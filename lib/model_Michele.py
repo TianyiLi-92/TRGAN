@@ -1,4 +1,4 @@
-from tensorflow.keras.layers import Input, Conv2D, LeakyReLU, Flatten, Dropout, Reshape, Conv2DTranspose, Dense
+from tensorflow.keras.layers import Input, Conv2D, LeakyReLU, Flatten, Dropout, Reshape, Conv2DTranspose, ZeroPadding2D, Add, Dense
 from tensorflow.keras.models import Model
 
 # Definition of the encoder (from Michele)
@@ -53,11 +53,26 @@ def decoder_Michele(nc, ngo):
     return Model(latent_vector, outputs)
 
 # Adversarial discriminator net (from Michele)
-def discriminator_Michele(ngo, nc):
-    inputs = Input( (ngo, ngo, nc) )
-    # input pred: (ngo) x (ngo) x (nc), going into a convolution
-    x = Conv2DTranspose(nc, 64//ngo, 64//ngo)(inputs)
-    # state size: 64 x 64 x (nc)
+def discriminator_Michele(conditionAdv, nei, ngo, nc, kW, sW):
+    if conditionAdv:
+        input_context = Input( (nei, nei, nc) )
+        # input Context: (nei) x (nei) x (nc)
+
+        input_pred = Input( (ngo, ngo, nc) )
+        # input pred: (ngo) x (ngo) x (nc), going into a zero-padding layer
+        x_pred = ZeroPadding2D(padding=(nei-ngo)//2)(input_pred)
+        # state size: (nei) x (nei) x (nc)
+
+        x = Add()([input_context, x_pred])
+        # state size: (nei) x (nei) x (nc), going into a convolution
+        x = Conv2DTranspose(nc, kW, sW)(x)
+        # state size: 64 x 64 x (nc)
+    else:
+        inputs = Input( (ngo, ngo, nc) )
+        # input pred: (ngo) x (ngo) x (nc), going into a convolution
+        x = Conv2DTranspose(nc, 64//ngo, 64//ngo)(inputs)
+        # state size: 64 x 64 x (nc)
+
     x = Conv2D(3, (4, 4), (2, 2), 'same')(x)
     x = LeakyReLU(0.2)(x)
     # state size: 32 x 32 x 3
@@ -75,7 +90,11 @@ def discriminator_Michele(ngo, nc):
     # state size: 32768
     outputs = Dense(units=1, activation='sigmoid')(x)
     # state size: 1
-    return Model(inputs, outputs)
+
+    if conditionAdv:
+        return Model([input_context, input_pred], outputs)
+    else:
+        return Model(inputs, outputs)
 
 
 
@@ -88,7 +107,7 @@ if __name__=="__main__":
 
     netE = encoder_Michele(FLAGS.nei, FLAGS.nc, FLAGS.kW, FLAGS.sW)
     netG = decoder_Michele(FLAGS.nc, FLAGS.ngo)
-    netD = discriminator_Michele(FLAGS.ngo, FLAGS.nc)
+    netD = discriminator_Michele(FLAGS.conditionAdv, FLAGS.nei, FLAGS.ngo, FLAGS.nc, FLAGS.kW, FLAGS.sW)
 
     tf.keras.utils.plot_model(netE, to_file='netE_Michele.png', show_shapes=True)
     tf.keras.utils.plot_model(netG, to_file='netG_Michele.png', show_shapes=True)

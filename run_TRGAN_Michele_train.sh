@@ -9,12 +9,13 @@ NEI=64
 KW=1
 SW=1
 NGO=32
+conditionAdv=True
 LEARNING_RATE=0.00002
 MAX_EPOCH=500
-ADVERSARIAL_RATIO=5.e-1
+ADVERSARIAL_RATIO=1.e-1
 LAMBDA_VEL_GRAD=0
 OVERLAPPRED=0
-SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_LR${LEARNING_RATE}_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
+SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_CA_LR${LEARNING_RATE}_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
 
 CMD="python main.py \
 --task ${TASK} \
@@ -23,6 +24,7 @@ CMD="python main.py \
 --kW ${KW} \
 --sW ${SW} \
 --ngo ${NGO} \
+--conditionAdv ${conditionAdv} \
 --learning_rate ${LEARNING_RATE} \
 --max_epoch ${MAX_EPOCH} \
 --adversarial_ratio ${ADVERSARIAL_RATIO} \
