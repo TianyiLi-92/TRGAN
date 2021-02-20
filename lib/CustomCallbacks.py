@@ -84,3 +84,20 @@ class EpochCallback(keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         self.model.epoch_step.assign_add(1)
+
+
+class LearningRateSchedulerCallback(keras.callbacks.Callback):
+    def __init__(self, boundaries, decay_rate):
+        super(LearningRateSchedulerCallback, self).__init__()
+        self.boundaries = boundaries
+        self.decay_rate = decay_rate
+
+    def on_epoch_begin(self, epoch, logs=None):
+        if epoch in self.boundaries:
+            self.model.d_optimizer.learning_rate.assign(
+                tf.math.multiply(self.model.d_optimizer.learning_rate, self.decay_rate)
+            )
+
+            self.model.g_optimizer.learning_rate.assign(
+                tf.math.multiply(self.model.g_optimizer.learning_rate, self.decay_rate)
+            )

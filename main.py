@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import h5py
 import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
@@ -8,7 +9,7 @@ from lib.defaultFlags import defaultFlags
 from lib.generateDataset import generateDataset
 from lib.TRCENet import TRCENet
 from lib.TRGAN import TRGAN
-from lib.CustomCallbacks import SampleCallback, EpochCallback
+from lib.CustomCallbacks import SampleCallback, EpochCallback, LearningRateSchedulerCallback
 
 FLAGS = defaultFlags()
 
@@ -53,8 +54,13 @@ if FLAGS.mode == 'train':
     sample_callback = SampleCallback(data_dev=(context_dev[0:3], gap_dev[0:3]), mask_gap=FLAGS.mask_gap, logdir=os.path.join(FLAGS.summary_dir, 'image'))
     epoch_callback = EpochCallback()
 
+    # Piecewise constant decay schedule
+    boundaries = 149 + np.arange(5) * 150
+    decay_rate = 0.5
+    learning_rate_scheduler_callback = LearningRateSchedulerCallback(boundaries, decay_rate)
+
     #callbacks = [early_stopping_callback, model_checkpoint_callback, tensorboard_callback, sample_callback, epoch_callback]
-    callbacks = [model_checkpoint_callback, tensorboard_callback, sample_callback, epoch_callback]
+    callbacks = [model_checkpoint_callback, tensorboard_callback, sample_callback, epoch_callback, learning_rate_scheduler_callback]
 
     train_history = net.fit(context_train, gap_train, batch_size=FLAGS.batch_size, epochs=FLAGS.max_epoch, verbose=2, callbacks=callbacks, validation_data=(context_dev, gap_dev), shuffle=True, initial_epoch=net.epoch_step.numpy())
 
