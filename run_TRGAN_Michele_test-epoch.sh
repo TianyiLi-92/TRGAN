@@ -10,11 +10,12 @@ KW=1
 SW=1
 NGO=32
 LEARNING_RATE=0.00002
-MAX_EPOCH=900
+MAX_EPOCH=1800
 ADVERSARIAL_RATIO=1.e-1
 LAMBDA_VEL_GRAD=0
 OVERLAPPRED=0
-SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_LR${LEARNING_RATE}-150-5-0.5_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
+GLOBALSEED=1
+SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_LR${LEARNING_RATE}-150-11-0.5_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}_GS${GLOBALSEED}"
 
 CMD="python test-epoch.py \
 --task ${TASK} \
@@ -28,6 +29,7 @@ CMD="python test-epoch.py \
 --adversarial_ratio ${ADVERSARIAL_RATIO} \
 --lambda_vel_grad ${LAMBDA_VEL_GRAD} \
 --overlapPred ${OVERLAPPRED} \
+--globalSeed ${GLOBALSEED} \
 --output_dir ./output/${TASK}${SUFFIX} \
 --summary_dir ./summary/${TASK}${SUFFIX} \
 --mode ${MODE} "

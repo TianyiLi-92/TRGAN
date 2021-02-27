@@ -1,4 +1,6 @@
 import os
+# Access GPU-deterministic op functionality
+os.environ['TF_DETERMINISTIC_OPS'] = '1'
 import numpy as np
 import h5py
 import tensorflow as tf
@@ -29,6 +31,9 @@ if FLAGS.summary_dir is None:
 if not os.path.exists(FLAGS.summary_dir):
     os.mkdir(FLAGS.summary_dir)
 
+# Set the global random seed
+tf.random.set_seed(FLAGS.globalSeed)
+
 if FLAGS.task == 'TRCENet':
     net = TRCENet(FLAGS)
     net.compile( optimizer=Adam(learning_rate=FLAGS.learning_rate, beta_1=FLAGS.beta) )
@@ -43,7 +48,6 @@ else:
 context_train, gap_train, context_dev, gap_dev, context_test, gap_test = generateDataset(FLAGS.dataset_path, FLAGS.mask_context, FLAGS.mask_gap)
 
 print("--------------- {} mode -----------------".format(FLAGS.mode))
-tf.random.set_seed(FLAGS.globalSeed)
 net.initialize()
 print("Finished initializing :D")
 
@@ -55,7 +59,9 @@ if FLAGS.mode == 'train':
     epoch_callback = EpochCallback()
 
     # Piecewise constant decay schedule
-    boundaries = 149 + np.arange(5) * 150
+    #boundaries = 149 + np.arange(5) * 150
+    #boundaries = 150 + np.arange(10) * 150
+    boundaries = 150 + np.arange(11) * 150
     decay_rate = 0.5
     learning_rate_scheduler_callback = LearningRateSchedulerCallback(boundaries, decay_rate)
 
