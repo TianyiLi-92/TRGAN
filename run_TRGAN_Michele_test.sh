@@ -10,11 +10,11 @@ KW=1
 SW=1
 NGO=32
 LEARNING_RATE=0.00002
-MAX_EPOCH=500
-ADVERSARIAL_RATIO=5.e-1
+MAX_EPOCH=900
+ADVERSARIAL_RATIO=1.e-1
 LAMBDA_VEL_GRAD=0
 OVERLAPPRED=0
-SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_LR${LEARNING_RATE}_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
+SUFFIX="_Michele_NEI${NEI}_KW${KW}_SW${SW}_NGO${NGO}_LR${LEARNING_RATE}-150-5-0.5_AR${ADVERSARIAL_RATIO}_VG${LAMBDA_VEL_GRAD}_OL${OVERLAPPRED}"
 
 CMD="python main.py \
 --task ${TASK} \
@@ -31,7 +31,7 @@ CMD="python main.py \
 --output_dir ./output/${TASK}${SUFFIX} \
 --summary_dir ./summary/${TASK}${SUFFIX} \
 --mode ${MODE} \
---checkpoint ./output/${TASK}${SUFFIX}/checkpoint/ckpt.262 "
+--checkpoint ./output/${TASK}${SUFFIX}/checkpoint/ckpt.21 "
 
 
 echo ${CMD} > ./logs/${TASK}_${MODE}${SUFFIX}_log.out
